@@ -1,0 +1,44 @@
+{
+  "name": "@stembord/debounce",
+  "version": "0.1.0",
+  "description": "debounce",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.com/stembord/ts-debounce.git"
+  },
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "module": "./lib/index.ts",
+  "scripts": {
+    "build": "tsc",
+    "prepublishOnly": "npm run clean && npm run build",
+    "test": "ts-node node_modules/tape/bin/tape ./tests/**/*.test.ts | tap-spec",
+    "clean": "npm run clean_build",
+    "clean_build": "rm -rf ./src",
+    "format.ts": "prettier-tslint fix '**/*.{ts,tsx}'",
+    "format.js": "prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
+    "format": "npm run format.ts && npm run format.js",
+    "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}'"
+  },
+  "keywords": [
+    "debounce"
+  ],
+  "author": "Nathan Faucett",
+  "license": "(MIT OR Apache-2.0)",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "@types/once": "^1.4.0",
+    "@types/tape": "^4.2.33",
+    "prettier": "^1.15.3",
+    "prettier-tslint": "^0.4.2",
+    "tap-spec": "^5.0.0",
+    "tape": "^4.9.2",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.12.0",
+    "tslint-config-prettier": "^1.17.0",
+    "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "once": "^1.4.0"
+  }
+}

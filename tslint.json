@@ -1,0 +1,20 @@
+{
+  "extends": ["tslint:latest", "tslint-config-prettier"],
+  "rules": {
+    "one-variable-per-declaration": false,
+    "no-submodule-imports": false,
+    "object-literal-sort-keys": false,
+    "no-shadowed-variable": false,
+    "no-console": false,
+    "no-empty-interface": false,
+    "no-empty": false,
+    "member-access": false,
+    "no-this-assignment": false,
+    "variable-name": [
+      true,
+      "allow-pascal-case",
+      "allow-snake-case",
+      "ban-keywords"
+    ]
+  }
+}
