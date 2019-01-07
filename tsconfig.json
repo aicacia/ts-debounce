@@ -8,5 +8,5 @@
     "strict": true,
     "lib": ["esnext"]
   },
-  "include": ["lib/**/*"]
+  "include": ["lib"]
 }

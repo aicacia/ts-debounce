@@ -1,4 +1,4 @@
-import * as tape from "tape";
+import tape = require("tape");
 import { debounce } from "../lib";
 
 tape("debounce", (assert: tape.Test) => {

@@ -1,4 +1,4 @@
-import * as once from "once";
+import once = require("once");
 
 export type Procedure = (...args: any[]) => void;
 
