@@ -1,5 +1,3 @@
-import once = require("once");
-
 export type Procedure = (...args: any[]) => void;
 
 export interface IOptions {
@@ -16,24 +14,30 @@ export const debounce = <F extends Procedure>(
   options: IOptions = {}
 ): F => {
   let timeoutId: NodeJS.Timeout | undefined;
+  let running = false;
 
-  const before = once(options.before || noop),
-    after = once(options.after || noop);
+  const before = options.before || noop,
+    after = options.after || noop;
 
   return function debounceFn<T>(this: T, ...args: any[]) {
     const context = this;
 
-    before();
+    if (!running) {
+      running = true;
+      before();
+    }
 
     if (timeoutId !== undefined) {
       clearTimeout(timeoutId);
     }
 
     if (!!options.isImmediate && timeoutId === undefined) {
+      running = false;
       func.apply(context, args);
       after();
     } else {
       timeoutId = setTimeout(() => {
+        running = false;
         timeoutId = undefined;
         func.apply(context, args);
         after();

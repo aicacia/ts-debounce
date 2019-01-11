@@ -1,6 +1,6 @@
 {
   "name": "@stembord/debounce",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "debounce",
   "repository": {
     "type": "git",
@@ -27,7 +27,6 @@
   "license": "(MIT OR Apache-2.0)",
   "readmeFilename": "README.md",
   "devDependencies": {
-    "@types/once": "^1.4.0",
     "@types/tape": "^4.2.33",
     "prettier": "^1.15.3",
     "prettier-tslint": "^0.4.2",
@@ -38,7 +37,5 @@
     "tslint-config-prettier": "^1.17.0",
     "typescript": "^3.2.2"
   },
-  "dependencies": {
-    "once": "^1.4.0"
-  }
+  "dependencies": {}
 }
