@@ -3,7 +3,7 @@
 debounce
 
 ```ts
-import { debounce } from "@stembord/debounce";
+import { debounce } from "@aicacia/debounce";
 
 let count = 0;
 
