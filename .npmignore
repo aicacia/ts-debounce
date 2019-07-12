@@ -1,7 +1,9 @@
 node_modules
+coverage
+test
 npm-debug.log
 tsconfig.json
 .vscode
 .editorconfig
 .gitignore
-.zuul
+.nyc_output

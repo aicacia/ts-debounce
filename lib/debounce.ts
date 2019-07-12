@@ -1,5 +1,3 @@
-export type Procedure = (...args: any[]) => void;
-
 export interface IOptions {
   isImmediate?: boolean;
   before?: () => void;
@@ -8,7 +6,7 @@ export interface IOptions {
 
 const noop = () => {};
 
-export const debounce = <F extends Procedure>(
+export const debounce = <F extends (...args: any[]) => void>(
   func: F,
   waitMilliseconds = 0,
   options: IOptions = {}
@@ -20,8 +18,6 @@ export const debounce = <F extends Procedure>(
     after = options.after || noop;
 
   return function debounceFn<T>(this: T, ...args: any[]) {
-    const context = this;
-
     if (!running) {
       running = true;
       before();
@@ -33,13 +29,13 @@ export const debounce = <F extends Procedure>(
 
     if (!!options.isImmediate && timeoutId === undefined) {
       running = false;
-      func.apply(context, args);
+      func.apply(this, args);
       after();
     } else {
       timeoutId = setTimeout(() => {
         running = false;
         timeoutId = undefined;
-        func.apply(context, args);
+        func.apply(this, args);
         after();
       }, waitMilliseconds);
     }

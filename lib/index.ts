@@ -1,1 +1,1 @@
-export * from "./debounce";
+export { IOptions, debounce } from "./debounce";
