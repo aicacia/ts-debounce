@@ -11,7 +11,7 @@ export const debounce = <F extends (...args: any[]) => void>(
   waitMilliseconds = 0,
   options: IOptions = {}
 ): F => {
-  let timeoutId: NodeJS.Timeout | undefined;
+  let timeoutId: NodeJS.Timeout | null = null;
   let running = false;
 
   const before = options.before || noop,
@@ -23,18 +23,18 @@ export const debounce = <F extends (...args: any[]) => void>(
       before();
     }
 
-    if (timeoutId !== undefined) {
+    if (timeoutId !== null) {
       clearTimeout(timeoutId);
     }
 
-    if (!!options.isImmediate && timeoutId === undefined) {
+    if (!!options.isImmediate && timeoutId === null) {
       running = false;
       func.apply(this, args);
       after();
     } else {
       timeoutId = setTimeout(() => {
         running = false;
-        timeoutId = undefined;
+        timeoutId = null;
         func.apply(this, args);
         after();
       }, waitMilliseconds);

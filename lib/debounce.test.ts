@@ -1,6 +1,10 @@
 import tape = require("tape");
 import { debounce } from "../lib";
 
+tape("debounce defaults", (assert: tape.Test) => {
+  debounce(assert.end)();
+});
+
 tape("debounce", (assert: tape.Test) => {
   let count = 0;
 
