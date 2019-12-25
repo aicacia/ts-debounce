@@ -1,10 +1,10 @@
 {
-  "name": "@stembord/debounce",
-  "version": "0.1.5",
+  "name": "@aicacia/debounce",
+  "version": "0.1.1",
   "description": "debounce",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/stembord/libs/ts-debounce.git"
+    "url": "https://gitlab.com/aicacia/libs/ts-debounce.git"
   },
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
