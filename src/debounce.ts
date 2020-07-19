@@ -8,10 +8,10 @@ const noop = () => {};
 
 export const debounce = <F extends (...args: any[]) => void>(
   func: F,
-  waitMilliseconds = 0,
+  waitMilliseconds: number = 0,
   options: IOptions = {}
 ): F => {
-  let timeoutId: NodeJS.Timeout | null = null;
+  let timeoutId: any;
   let running = false;
 
   const before = options.before || noop,

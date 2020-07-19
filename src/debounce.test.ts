@@ -1,5 +1,5 @@
 import tape = require("tape");
-import { debounce } from "../lib";
+import { debounce } from ".";
 
 tape("debounce defaults", (assert: tape.Test) => {
   debounce(assert.end)();
@@ -21,7 +21,7 @@ tape("debounce", (assert: tape.Test) => {
       },
       before() {
         count += 1;
-      }
+      },
     }
   );
 
@@ -48,7 +48,7 @@ tape("debounce isImmediate", (assert: tape.Test) => {
       },
       before() {
         count += 1;
-      }
+      },
     }
   );
 

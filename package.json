@@ -6,17 +6,17 @@
     "type": "git",
     "url": "https://gitlab.com/aicacia/libs/ts-debounce.git"
   },
-  "main": "./src/index.js",
-  "types": "./src/index.d.ts",
-  "module": "./lib/index.ts",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "module": "./src/index.ts",
   "scripts": {
     "build": "tsc",
     "prepublishOnly": "npm run clean && npm run build",
-    "test": "ts-node node_modules/.bin/tape lib/**/*.test.{ts,tsx} | tap-spec",
-    "coverage": "nyc --reporter=lcov --require ts-node/register tape lib/**/*.test.{ts,tsx} | tap-spec; nyc report ---reporter=text",
-    "clean": "rm -rf ./src",
+    "test": "ts-node node_modules/.bin/tape src/**/*.test.{ts,tsx} | tap-spec",
+    "coverage": "nyc --reporter=lcov --require ts-node/register tape src/**/*.test.{ts,tsx} | tap-spec; nyc report ---reporter=text",
+    "clean": "rm -rf ./lib",
     "format": "prettier-tslint fix '**/*.{ts,tsx}' && prettier --write '**/*.{js,jsx,json}' --ignore-path .gitignore",
-    "lint": "tslint -c tslint.json 'lib/**/*.{ts,tsx}' -e 'lib/**/*.test.*'"
+    "lint": "tslint -c tslint.json 'src/**/*.{ts,tsx}' -e 'src/**/*.test.*'"
   },
   "keywords": [
     "debounce"
@@ -40,10 +40,10 @@
   "dependencies": {},
   "nyc": {
     "include": [
-      "lib/**/*"
+      "src/**/*"
     ],
     "exclude": [
-      "**/*.test.*"
+      "src/**/*.test.*"
     ],
     "extension": [
       ".ts",

@@ -4,10 +4,10 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./src",
+    "outDir": "./lib",
     "strict": true,
-    "lib": ["esnext"]
+    "lib": ["esnext", "DOM"]
   },
-  "include": ["lib"],
-  "exclude": ["**/*.test.*"]
+  "include": ["src"],
+  "exclude": ["src/**/*.test.*"]
 }
