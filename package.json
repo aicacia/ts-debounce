@@ -1,6 +1,6 @@
 {
   "name": "@aicacia/debounce",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "debounce",
   "repository": {
     "type": "git",
@@ -8,9 +8,9 @@
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
-  "module": "./src/index.ts",
   "scripts": {
     "build": "tsc",
+    "doc": "typedoc",
     "prepublishOnly": "npm run clean && npm run build",
     "test": "ts-node node_modules/.bin/tape src/**/*.test.{ts,tsx} | tap-spec",
     "coverage": "nyc --reporter=lcov --require ts-node/register tape src/**/*.test.{ts,tsx} | tap-spec; nyc report ---reporter=text",
@@ -35,12 +35,12 @@
     "ts-node": "^8.10.2",
     "tslint": "^6.1.2",
     "tslint-config-prettier": "^1.18.0",
-    "typescript": "^3.9.6"
+    "typescript": "^3.9.7"
   },
   "dependencies": {},
   "nyc": {
     "include": [
-      "src/**/*"
+      "src"
     ],
     "exclude": [
       "src/**/*.test.*"
