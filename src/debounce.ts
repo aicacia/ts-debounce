@@ -4,14 +4,14 @@ export interface IOptions {
   after?: () => void;
 }
 
-const noop = () => {};
+const noop = () => undefined;
 
-export const debounce = <F extends (...args: any[]) => void>(
+export function debounce<F extends (...args: any[]) => void>(
   func: F,
-  waitMilliseconds: number = 0,
+  waitMilliseconds = 0,
   options: IOptions = {}
-): F => {
-  let timeoutId: any;
+): F {
+  let timeoutId: any = null;
   let running = false;
 
   const before = options.before || noop,
@@ -23,11 +23,12 @@ export const debounce = <F extends (...args: any[]) => void>(
       before();
     }
 
-    if (timeoutId !== null) {
+    if (timeoutId != null) {
       clearTimeout(timeoutId);
+      timeoutId = null;
     }
 
-    if (!!options.isImmediate && timeoutId === null) {
+    if (!!options.isImmediate && timeoutId == null) {
       running = false;
       func.apply(this, args);
       after();
@@ -40,4 +41,4 @@ export const debounce = <F extends (...args: any[]) => void>(
       }, waitMilliseconds);
     }
   } as any;
-};
+}

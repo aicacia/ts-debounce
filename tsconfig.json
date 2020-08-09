@@ -1,12 +1,14 @@
 {
   "compilerOptions": {
+    "importHelpers": true,
     "target": "es3",
     "module": "commonjs",
     "moduleResolution": "node",
     "declaration": true,
-    "outDir": "./lib",
+    "outDir": "lib",
     "strict": true,
-    "lib": ["esnext", "DOM"]
+    "downlevelIteration": true,
+    "lib": ["esnext"]
   },
   "include": ["src"],
   "exclude": ["src/**/*.test.*"]
