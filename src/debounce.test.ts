@@ -10,12 +10,13 @@ tape("debounce", (assert: tape.Test) => {
 
   const func = debounce(
     () => {
-      assert.equals(count, 1);
+      count += 1;
+      assert.equals(count, 2);
     },
     100,
     {
       after() {
-        count -= 1;
+        count -= 2;
         assert.equals(count, 0);
         assert.end();
       },
