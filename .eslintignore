@@ -1,5 +1,6 @@
+.github
+.nyc_output/
 .vscode/
-nyc_output/
 coverage/
 docs/
 lib/
