@@ -4,7 +4,7 @@
   "description": "debounce",
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/aicacia/libs/ts-debounce.git"
+    "url": "https://github.com/aicacia/ts-debounce"
   },
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
