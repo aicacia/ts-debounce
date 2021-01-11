@@ -1,6 +1,6 @@
 {
   "name": "@aicacia/debounce",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "debounce",
   "repository": {
     "type": "git",
@@ -16,11 +16,12 @@
     "coverage": "nyc --reporter=lcov --check-coverage --lines=75 --require ts-node/register tape src/**/*.test.{ts,tsx} | tap-spec; nyc report ---reporter=text",
     "clean": "rm -rf ./lib",
     "lint": "eslint . --fix",
-    "prettier": "prettier --ignore-path ./.eslintignore --ignore-unknown --write ."
+    "prettier": "prettier --ignore-path ./.eslintignore --ignore-unknown --write .",
+    "preCommit": "npm run prettier && npm run lint && npm run coverage"
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run prettier && npm run lint && npm run coverage"
+      "pre-commit": "npm run preCommit"
     }
   },
   "keywords": [

@@ -11,8 +11,8 @@ export function debounce<F extends (...args: any[]) => void>(
   waitMilliseconds = 0,
   options: IOptions = {}
 ): F {
-  let timeoutId: any = null;
-  let running = false;
+  let timeoutId: any = null,
+    running = false;
 
   const before = options.before || noop,
     after = options.after || noop;
