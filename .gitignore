@@ -1,6 +1,8 @@
-node_modules
-coverage
-docs
-lib
+node_modules/
+coverage/
+docs/
+dest/
+cjs/
+esm/
+.nyc_output/
 npm-debug.log
-.nyc_output
