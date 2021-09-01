@@ -1,7 +1,9 @@
+.vscode/
 node_modules/
 coverage/
 docs/
-dest/
+types/
+browser/
 cjs/
 esm/
 .nyc_output/

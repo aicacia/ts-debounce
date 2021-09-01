@@ -10,4 +10,5 @@ node_modules/
 .eslintrc
 .gitignore
 npm-debug.log
+tsconfig.esm.json
 tsconfig.json

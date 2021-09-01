@@ -3,7 +3,8 @@
 .vscode/
 coverage/
 docs/
-dest/
+types/
+browser/
 cjs/
 esm/
 node_modules/
