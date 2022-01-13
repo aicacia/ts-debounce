@@ -10,5 +10,6 @@ node_modules/
 .eslintrc
 .gitignore
 npm-debug.log
+rollup.config.js
 tsconfig.esm.json
 tsconfig.json
