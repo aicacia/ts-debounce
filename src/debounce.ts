@@ -16,7 +16,7 @@ export function debounce<F extends (...args: any[]) => void>(
   waitMilliseconds = 0,
   options: IOptions = {}
 ): DebounceFn<F> {
-  let timeoutId: any = null,
+  let timeoutId: ReturnType<typeof setTimeout> | null = null,
     running = false;
 
   const before = options.before || noop,

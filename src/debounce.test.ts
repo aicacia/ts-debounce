@@ -55,3 +55,41 @@ tape("debounce isImmediate", (assert: tape.Test) => {
 
   func();
 });
+
+tape("debounce flush", (assert: tape.Test) => {
+  let count = 0;
+
+  const func = debounce(() => {
+    count += 1;
+  }, 100);
+
+  func();
+  func();
+
+  func.flush();
+
+  assert.equals(count, 1);
+
+  setTimeout(() => {
+    assert.equals(count, 1);
+    assert.end();
+  }, 101);
+});
+
+tape("debounce cancel", (assert: tape.Test) => {
+  let count = 0;
+
+  const func = debounce(() => {
+    count += 1;
+  }, 100);
+
+  func();
+  func();
+
+  func.cancel();
+
+  setTimeout(() => {
+    assert.equals(count, 0);
+    assert.end();
+  }, 101);
+});
