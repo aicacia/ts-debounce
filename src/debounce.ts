@@ -1,4 +1,4 @@
-export interface IOptions {
+export interface IDebounceOptions {
   isImmediate?: boolean;
   before?: () => void;
   after?: () => void;
@@ -6,15 +6,15 @@ export interface IOptions {
 
 const noop = () => undefined;
 
-export type DebounceFn<F extends (...args: any[]) => void> = F & {
+export type DebounceFn<F extends (...args: any[]) => any> = F & {
   cancel(): void;
   flush(): void;
 };
 
-export function debounce<F extends (...args: any[]) => void>(
+export function debounce<F extends (...args: any[]) => any>(
   func: F,
   waitMilliseconds = 0,
-  options: IOptions = {}
+  options: IDebounceOptions = {}
 ): DebounceFn<F> {
   let timeoutId: ReturnType<typeof setTimeout> | null = null,
     running = false;

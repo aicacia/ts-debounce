@@ -1,1 +1,1 @@
-export { IOptions, debounce } from "./debounce";
+export { type IDebounceOptions, type DebounceFn, debounce } from "./debounce";

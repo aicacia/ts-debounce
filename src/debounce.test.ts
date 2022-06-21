@@ -1,11 +1,11 @@
 import * as tape from "tape";
 import { debounce } from ".";
 
-tape("debounce defaults", (assert: tape.Test) => {
+tape("debounce defaults", (assert) => {
   debounce(assert.end)();
 });
 
-tape("debounce", (assert: tape.Test) => {
+tape("debounce", (assert) => {
   let count = 0;
 
   const func = debounce(
@@ -33,7 +33,7 @@ tape("debounce", (assert: tape.Test) => {
   func();
 });
 
-tape("debounce isImmediate", (assert: tape.Test) => {
+tape("debounce isImmediate", (assert) => {
   let count = 0;
 
   const func = debounce(
@@ -56,7 +56,7 @@ tape("debounce isImmediate", (assert: tape.Test) => {
   func();
 });
 
-tape("debounce flush", (assert: tape.Test) => {
+tape("debounce flush", (assert) => {
   let count = 0;
 
   const func = debounce(() => {
@@ -76,7 +76,7 @@ tape("debounce flush", (assert: tape.Test) => {
   }, 101);
 });
 
-tape("debounce cancel", (assert: tape.Test) => {
+tape("debounce cancel", (assert) => {
   let count = 0;
 
   const func = debounce(() => {
