@@ -11,20 +11,12 @@
     "strict": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "lib": [
-      "ESNext"
-    ]
+    "lib": ["ESNext"]
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "src/**/*.test.*"
-  ],
+  "include": ["src"],
+  "exclude": ["src/**/*.test.*"],
   "typedocOptions": {
-    "entryPoints": [
-      "src/index.ts"
-    ],
+    "entryPoints": ["src/index.ts"],
     "out": "docs",
     "excludeExternals": true,
     "excludePrivate": true,

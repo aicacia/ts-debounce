@@ -93,3 +93,21 @@ tape("debounce cancel", (assert) => {
     assert.end();
   }, 101);
 });
+
+tape("debounce cancel next tick", (assert) => {
+  let count = 0;
+
+  const func = debounce(() => {
+    count += 1;
+  }, 0);
+
+  func();
+  func();
+
+  func.cancel();
+
+  setTimeout(() => {
+    assert.equals(count, 0);
+    assert.end();
+  }, 100);
+});
