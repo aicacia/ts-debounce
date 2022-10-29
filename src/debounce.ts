@@ -1,3 +1,5 @@
+import raf from "raf";
+
 export interface IDebounceOptions {
   isImmediate?: boolean;
   before?: () => void;
@@ -17,15 +19,19 @@ export function debounce<F extends (...args: any[]) => any>(
   options: IDebounceOptions = {}
 ): DebounceFn<F> {
   let timeoutId: ReturnType<typeof setTimeout> | null = null,
+    rafTimeoutId: ReturnType<typeof raf> | null = null,
     running = false;
 
   const before = options.before || noop,
     after = options.after || noop;
 
   function clear() {
-    if (timeoutId != null) {
+    if (timeoutId !== null) {
       clearTimeout(timeoutId);
       timeoutId = null;
+    } else if (rafTimeoutId !== null) {
+      raf.cancel(rafTimeoutId);
+      rafTimeoutId = null;
     }
   }
 
@@ -56,8 +62,13 @@ export function debounce<F extends (...args: any[]) => any>(
 
     clear();
 
-    if (!!options.isImmediate && timeoutId == null) {
+    if (!!options.isImmediate && timeoutId === null && rafTimeoutId === null) {
       call(this, args);
+    } else if (waitMilliseconds === 0) {
+      rafTimeoutId = raf(() => {
+        rafTimeoutId = null;
+        call(this, args);
+      });
     } else {
       timeoutId = setTimeout(() => {
         timeoutId = null;

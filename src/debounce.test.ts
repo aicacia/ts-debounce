@@ -1,4 +1,4 @@
-import * as tape from "tape";
+import tape from "tape";
 import { debounce } from ".";
 
 tape("debounce defaults", (assert) => {
