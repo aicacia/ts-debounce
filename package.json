@@ -1,6 +1,6 @@
 {
   "name": "@aicacia/debounce",
-  "version": "0.1.17",
+  "version": "0.1.18",
   "description": "debounce",
   "repository": {
     "type": "git",
@@ -34,7 +34,6 @@
     "@rollup/plugin-commonjs": "22",
     "@rollup/plugin-node-resolve": "13",
     "@rollup/plugin-typescript": "8",
-    "@types/raf": "3",
     "@types/tape": "4",
     "@typescript-eslint/eslint-plugin": "5",
     "@typescript-eslint/parser": "5",
@@ -56,9 +55,6 @@
   },
   "peerDependencies": {
     "tslib": "2"
-  },
-  "dependencies": {
-    "raf": "3"
   },
   "nyc": {
     "include": [
