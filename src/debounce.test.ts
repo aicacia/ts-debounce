@@ -111,3 +111,25 @@ tape("debounce cancel next tick", (assert) => {
     assert.end();
   }, 100);
 });
+
+tape("debounce multiple args", (assert) => {
+  let a = 0;
+  let b = 0;
+  let c = 0;
+
+  const func = debounce((a0, a1, a2) => {
+    a = a0;
+    b = a1;
+    c = a2;
+  }, 0);
+
+  func(1, 2, 3);
+  func.flush();
+
+  setTimeout(() => {
+    assert.equals(a, 1);
+    assert.equals(b, 2);
+    assert.equals(c, 3);
+    assert.end();
+  }, 100);
+});

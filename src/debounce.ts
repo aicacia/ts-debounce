@@ -16,11 +16,14 @@ export function debounce<F extends (...args: any[]) => any>(
   waitMilliseconds = 0,
   options: IDebounceOptions = {}
 ): DebounceFn<F> {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null,
-    running = false;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  let running = false;
 
-  const before = options.before || noop,
-    after = options.after || noop;
+  const before = options.before || noop;
+  const after = options.after || noop;
+
+  let currentThis: any = null;
+  let currentArguments: any[] | null = null;
 
   function clear() {
     if (timeoutId !== null) {
@@ -31,6 +34,8 @@ export function debounce<F extends (...args: any[]) => any>(
 
   function cancel() {
     running = false;
+    currentThis = null;
+    currentArguments = null;
     clear();
   }
 
@@ -39,10 +44,14 @@ export function debounce<F extends (...args: any[]) => any>(
     call();
   }
 
-  function call<T>(this: T, ...args: any[]) {
-    running = false;
-    func.apply(this, args);
-    after();
+  function call() {
+    if (running) {
+      running = false;
+      func.apply(currentThis, currentArguments as any[]);
+      currentThis = null;
+      currentArguments = null;
+      after();
+    }
   }
 
   const debounceFn: DebounceFn<F> = function debounceFn<T>(
@@ -55,13 +64,15 @@ export function debounce<F extends (...args: any[]) => any>(
     }
 
     clear();
+    currentThis = this; // eslint-disable-line @typescript-eslint/no-this-alias
+    currentArguments = args;
 
     if (!!options.isImmediate && timeoutId === null) {
-      call(this, args);
+      call();
     } else {
       timeoutId = setTimeout(() => {
         timeoutId = null;
-        call(this, args);
+        call();
       }, waitMilliseconds);
     }
   } as any;
