@@ -1,4 +1,5 @@
 export interface IThrottleOptions {
+  debounceMode?: boolean;
   isImmediate?: boolean;
   before?: () => void;
   after?: () => void;
@@ -71,7 +72,8 @@ export function throttle<F extends (...args: any[]) => any>(
     currentThis = this; // eslint-disable-line @typescript-eslint/no-this-alias
     currentArguments = args;
 
-    if (deltaMS > delay || (!!options.isImmediate && timeoutId === null)) {
+    const callNow = !!options.isImmediate && timeoutId === null;
+    if (options.debounceMode ? callNow : deltaMS > delay || callNow) {
       call();
     } else {
       timeoutId = setTimeout(() => {
