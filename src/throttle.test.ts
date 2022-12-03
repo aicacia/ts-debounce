@@ -4,17 +4,14 @@ import { throttle } from ".";
 const FPS = 1000 / 60;
 
 async function run(fn: () => void, frames = 60) {
-  return new Promise<void>((resolve) => {
+  return new Promise<void>(async (resolve) => {
     let frame = 0;
-    (function onRun() {
+    while (frame < frames) {
+      frame += 1;
       fn();
-      if (frame > frames) {
-        resolve();
-      } else {
-        frame += 1;
-        setTimeout(onRun, FPS);
-      }
-    })();
+      await wait(FPS);
+    }
+    resolve();
   });
 }
 
@@ -28,15 +25,19 @@ tape("throttle defaults", (assert) => {
   throttle(assert.end)();
 });
 
-tape("throttle defaults", async (assert) => {
+tape("throttle", async (assert) => {
+  let called = 0;
   let count = 0;
 
-  await run(
-    throttle(() => {
-      count += 1;
-    }, 100)
-  );
+  const fn = throttle(() => {
+    count += 1;
+  }, 100);
+  await run(() => {
+    called += 1;
+    fn();
+  });
 
+  assert.equals(called, 60);
   assert.equals(count, 9);
   assert.end();
 });
