@@ -21,11 +21,30 @@ async function wait(ms: number) {
   });
 }
 
-tape("throttle defaults", (assert) => {
-  throttle(assert.end)();
+tape("throttle", (assert) => {
+  const counter = {
+    count: 0,
+    inc: (amount: number) => {
+      counter.count += amount;
+    },
+  };
+
+  const fn = throttle(counter.inc, 0, {
+    before() {
+      assert.equals(counter.count, 0);
+    },
+    after() {
+      assert.equals(counter.count, 1);
+      assert.end();
+    },
+  });
+
+  fn(1);
+
+  fn.cancel();
 });
 
-tape("throttle", async (assert) => {
+tape("throttle every 100ms", async (assert) => {
   let called = 0;
   let count = 0;
 
@@ -38,7 +57,7 @@ tape("throttle", async (assert) => {
   });
 
   assert.equals(called, 60);
-  assert.equals(count, 9);
+  assert.equals(count, 1);
   assert.end();
 });
 

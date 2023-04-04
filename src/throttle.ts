@@ -1,11 +1,9 @@
+import { noop } from "./noop";
+
 export interface IThrottleOptions {
-  debounceMode?: boolean;
-  isImmediate?: boolean;
   before?: () => void;
   after?: () => void;
 }
-
-const noop = () => undefined;
 
 export type ThrottleFn<F extends (...args: any[]) => any> = F & {
   cancel(): void;
@@ -17,44 +15,40 @@ export function throttle<F extends (...args: any[]) => any>(
   delay = 0,
   options: IThrottleOptions = {}
 ): ThrottleFn<F> {
-  let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let running = false;
   let lastMS = 0;
+  let timeoutId: ReturnType<typeof setTimeout> | null = null;
+  let lastCall: (() => void) | null = null;
 
   const before = options.before || noop;
   const after = options.after || noop;
 
-  let currentThis: any = null;
-  let currentArguments: any[] | null = null;
-
-  function clear() {
+  function clearTimeoutIfSet() {
     if (timeoutId !== null) {
       clearTimeout(timeoutId);
       timeoutId = null;
+      return true;
+    } else {
+      return false;
     }
   }
 
   function cancel() {
+    if (clearTimeoutIfSet()) {
+      lastCall = null;
+    }
+    if (running) {
+      after();
+    }
     running = false;
-    currentThis = null;
-    currentArguments = null;
-    clear();
   }
 
   function flush() {
-    clear();
-    call();
-  }
-
-  function call() {
-    if (running) {
-      lastMS = Date.now();
-      running = false;
-      func.apply(currentThis, currentArguments as any[]);
-      currentThis = null;
-      currentArguments = null;
-      after();
+    if (lastCall !== null) {
+      lastCall();
+      lastCall = null;
     }
+    cancel();
   }
 
   const throttleFn: ThrottleFn<F> = function throttleFn<T>(
@@ -62,24 +56,26 @@ export function throttle<F extends (...args: any[]) => any>(
     ...args: any[]
   ) {
     const deltaMS = Date.now() - lastMS;
+    const self = this; // eslint-disable-line @typescript-eslint/no-this-alias
+
+    function call() {
+      lastMS = Date.now();
+      func.apply(self, args);
+    }
 
     if (!running) {
       running = true;
       before();
     }
 
-    clear();
-    currentThis = this; // eslint-disable-line @typescript-eslint/no-this-alias
-    currentArguments = args;
+    lastCall = call;
+    clearTimeoutIfSet();
 
-    const callNow = !!options.isImmediate && timeoutId === null;
-    if (options.debounceMode ? callNow : deltaMS > delay || callNow) {
+    lastMS = Date.now();
+    if (deltaMS > delay) {
       call();
     } else {
-      timeoutId = setTimeout(() => {
-        timeoutId = null;
-        call();
-      }, delay);
+      timeoutId = setTimeout(call, delay - deltaMS);
     }
   } as any;
 

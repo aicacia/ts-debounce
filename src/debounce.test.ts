@@ -33,29 +33,6 @@ tape("debounce", (assert) => {
   func();
 });
 
-tape("debounce isImmediate", (assert) => {
-  let count = 0;
-
-  const func = debounce(
-    () => {
-      assert.equals(count, 1);
-    },
-    100,
-    {
-      isImmediate: true,
-      after() {
-        count -= 1;
-        assert.end();
-      },
-      before() {
-        count += 1;
-      },
-    }
-  );
-
-  func();
-});
-
 tape("debounce flush", (assert) => {
   let count = 0;
 
