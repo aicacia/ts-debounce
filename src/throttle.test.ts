@@ -3,7 +3,11 @@ import { throttle } from ".";
 
 const FPS = 1000 / 60;
 
-async function run(fn: () => void, frames = 60) {
+async function run(
+  fn: (...args: any[]) => any,
+  end: (...args: any[]) => any = () => undefined,
+  frames = 60
+) {
   return new Promise<void>(async (resolve) => {
     let frame = 0;
     while (frame < frames) {
@@ -11,6 +15,7 @@ async function run(fn: () => void, frames = 60) {
       fn();
       await wait(FPS);
     }
+    end();
     resolve();
   });
 }
@@ -21,11 +26,11 @@ async function wait(ms: number) {
   });
 }
 
-tape("throttle", (assert) => {
+tape("throttle", async (assert) => {
   const counter = {
     count: 0,
-    inc: (amount: number) => {
-      counter.count += amount;
+    inc: () => {
+      counter.count += 1;
     },
   };
 
@@ -34,14 +39,12 @@ tape("throttle", (assert) => {
       assert.equals(counter.count, 0);
     },
     after() {
-      assert.equals(counter.count, 1);
+      assert.equals(counter.count, 60);
       assert.end();
     },
   });
 
-  fn(1);
-
-  fn.cancel();
+  await run(fn, fn.cancel);
 });
 
 tape("throttle every 100ms", async (assert) => {
@@ -67,7 +70,7 @@ tape("throttle cancel", async (assert) => {
   const fn = throttle(() => {
     count += 1;
   }, 100);
-  const promise = run(fn, 2);
+  const promise = run(fn);
   fn.cancel();
   await promise;
 
