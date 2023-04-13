@@ -1,10 +1,5 @@
 import { noop } from "./noop";
 
-export interface IThrottleOptions {
-  before?: () => void;
-  after?: () => void;
-}
-
 export type ThrottleFn<F extends (...args: any[]) => any> = F & {
   cancel(): void;
   flush(): void;
@@ -12,16 +7,11 @@ export type ThrottleFn<F extends (...args: any[]) => any> = F & {
 
 export function throttle<F extends (...args: any[]) => any>(
   func: F,
-  delay = 0,
-  options: IThrottleOptions = {}
+  delay = 0
 ): ThrottleFn<F> {
-  let running = false;
   let lastMS = 0;
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let lastCall: (() => void) | null = null;
-
-  const before = options.before || noop;
-  const after = options.after || noop;
 
   function clearTimeoutIfSet() {
     if (timeoutId !== null) {
@@ -37,10 +27,7 @@ export function throttle<F extends (...args: any[]) => any>(
     if (clearTimeoutIfSet()) {
       lastCall = null;
     }
-    if (running) {
-      after();
-    }
-    running = false;
+    lastMS = Date.now();
   }
 
   function flush() {
@@ -63,15 +50,9 @@ export function throttle<F extends (...args: any[]) => any>(
       func.apply(self, args);
     }
 
-    if (!running) {
-      running = true;
-      before();
-    }
-
     lastCall = call;
     clearTimeoutIfSet();
 
-    lastMS = Date.now();
     if (deltaMS > delay) {
       call();
     } else {

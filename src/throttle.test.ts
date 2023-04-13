@@ -2,12 +2,9 @@ import tape from "tape";
 import { throttle } from ".";
 
 const FPS = 1000 / 60;
+const FRAMES = 60;
 
-async function run(
-  fn: (...args: any[]) => any,
-  end: (...args: any[]) => any = () => undefined,
-  frames = 60
-) {
+async function run(fn: (...args: any[]) => any, frames = FRAMES) {
   return new Promise<void>(async (resolve) => {
     let frame = 0;
     while (frame < frames) {
@@ -15,7 +12,6 @@ async function run(
       fn();
       await wait(FPS);
     }
-    end();
     resolve();
   });
 }
@@ -34,32 +30,27 @@ tape("throttle", async (assert) => {
     },
   };
 
-  const fn = throttle(counter.inc, 0, {
-    before() {
-      assert.equals(counter.count, 0);
-    },
-    after() {
-      assert.equals(counter.count, 60);
-      assert.end();
-    },
-  });
+  const fn = throttle(counter.inc, 0);
 
-  await run(fn, fn.cancel);
+  assert.equals(counter.count, 0);
+  await run(fn);
+  assert.equals(counter.count, 60);
+  assert.end();
 });
 
-tape("throttle every 100ms", async (assert) => {
+tape(`throttle every ${(FPS * FRAMES) | 0}ms`, async (assert) => {
   let called = 0;
   let count = 0;
 
   const fn = throttle(() => {
     count += 1;
-  }, 100);
+  }, FPS * FRAMES);
   await run(() => {
     called += 1;
     fn();
   });
 
-  assert.equals(called, 60);
+  assert.equals(called, FRAMES);
   assert.equals(count, 1);
   assert.end();
 });
@@ -69,10 +60,11 @@ tape("throttle cancel", async (assert) => {
 
   const fn = throttle(() => {
     count += 1;
-  }, 100);
-  const promise = run(fn);
+  }, FPS * FRAMES);
+  fn();
+  fn();
   fn.cancel();
-  await promise;
+  await wait(FPS * FRAMES);
 
   assert.equals(count, 1);
   assert.end();
@@ -83,9 +75,8 @@ tape("throttle flush", async (assert) => {
 
   const fn = throttle(() => {
     count += 1;
-  }, 100);
+  }, FPS * FRAMES);
   fn();
-  await wait(10);
   fn();
   fn.flush();
 
