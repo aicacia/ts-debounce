@@ -8,3 +8,4 @@ cjs/
 esm/
 .nyc_output/
 npm-debug.log
+*.0x

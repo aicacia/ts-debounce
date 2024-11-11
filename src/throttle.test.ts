@@ -1,18 +1,20 @@
-import tape from "tape";
+import * as tape from "tape";
 import { throttle } from ".";
 
-const FPS = 1000 / 60;
-const FRAMES = 60;
+const MILISECONDS_PER_FRAME = 1000 / 60;
+const FPS = 60;
 
-async function run(fn: (...args: any[]) => any, frames = FRAMES) {
-  return new Promise<void>(async (resolve) => {
+async function run(fn: () => void, frames = FPS) {
+  return new Promise<void>((resolve) => {
     let frame = 0;
-    while (frame < frames) {
-      frame += 1;
-      fn();
-      await wait(FPS);
+    let promise = Promise.resolve();
+    while (frame++ < frames) {
+      promise = promise.then(() => {
+        fn();
+        return wait(MILISECONDS_PER_FRAME);
+      });
     }
-    resolve();
+    promise.finally(resolve);
   });
 }
 
@@ -38,48 +40,90 @@ tape("throttle", async (assert) => {
   assert.end();
 });
 
-tape(`throttle every ${(FPS * FRAMES) | 0}ms`, async (assert) => {
-  let called = 0;
-  let count = 0;
+tape(
+  `throttle every ${(MILISECONDS_PER_FRAME * FPS) | 0}ms`,
+  async (assert) => {
+    let called = 0;
+    let count = 0;
 
-  const fn = throttle(() => {
-    count += 1;
-  }, FPS * FRAMES);
-  await run(() => {
-    called += 1;
-    fn();
-  });
+    const fn = throttle(() => {
+      count += 1;
+    }, MILISECONDS_PER_FRAME * FPS);
+    await run(() => {
+      called += 1;
+      fn();
+    });
 
-  assert.equals(called, FRAMES);
-  assert.equals(count, 1);
-  assert.end();
-});
+    assert.equals(called, FPS);
+    assert.equals(count, 1);
+    assert.end();
+  }
+);
 
 tape("throttle cancel", async (assert) => {
   let count = 0;
 
   const fn = throttle(() => {
     count += 1;
-  }, FPS * FRAMES);
+  }, MILISECONDS_PER_FRAME * FPS);
   fn();
   fn();
   fn.cancel();
-  await wait(FPS * FRAMES);
+  await wait(MILISECONDS_PER_FRAME * FPS);
 
   assert.equals(count, 1);
   assert.end();
 });
 
-tape("throttle flush", async (assert) => {
+tape("throttle flush", (assert) => {
   let count = 0;
 
   const fn = throttle(() => {
     count += 1;
-  }, FPS * FRAMES);
+  }, MILISECONDS_PER_FRAME * FPS);
   fn();
   fn();
   fn.flush();
 
   assert.equals(count, 2);
+  assert.end();
+});
+
+tape("throttle result", async (assert) => {
+  let count = 0;
+
+  const fn = throttle(() => {
+    count += 1;
+    return count;
+  }, MILISECONDS_PER_FRAME);
+  const countPromises: Promise<number>[] = [];
+  await run(() => {
+    countPromises.push(fn());
+  });
+
+  const counts = await Promise.all(countPromises);
+  for (let i = 0; i < counts.length; i++) {
+    assert.equals(counts[i], i + 1);
+  }
+  assert.end();
+});
+
+tape("throttle promise result", async (assert) => {
+  let count = 0;
+
+  const fn = throttle(async () => {
+    count += 1;
+    await wait(0);
+    return count;
+  }, MILISECONDS_PER_FRAME);
+  const countPromises: Promise<number>[] = [];
+  await run(() => {
+    countPromises.push(fn());
+  });
+
+  const counts = await Promise.all(countPromises);
+  for (let i = 0; i < counts.length; i++) {
+    assert.equals(counts[i], i + 1);
+  }
   assert.end();
 });

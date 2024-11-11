@@ -25,7 +25,7 @@ const func = debounce(
     before() {
       count += 1;
     },
-  }
+  },
 );
 
 func();
