@@ -12,7 +12,7 @@
 		"downlevelIteration": true,
 		"lib": ["ESNext", "DOM"]
 	},
-	"include": ["src"],
+	"include": ["src/**/*.ts"],
 	"exclude": ["src/**/*.test.*", "src/**/*.benchmark.*"],
 	"typedocOptions": {
 		"entryPoints": ["src/index.ts"],

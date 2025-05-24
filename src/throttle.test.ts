@@ -80,11 +80,13 @@ tape("throttle flush", (assert) => {
 
 	const fn = throttle(() => {
 		count += 1;
+		return count;
 	}, MILISECONDS_PER_FRAME * FPS);
 	fn();
 	fn();
-	fn.flush();
+	const flushResult = fn.flush();
 
+	assert.equals(flushResult, 2);
 	assert.equals(count, 2);
 	assert.end();
 });

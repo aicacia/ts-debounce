@@ -45,13 +45,15 @@ tape("debounce flush", (assert) => {
 
 	const func = debounce(() => {
 		count += 1;
+		return count;
 	}, 100);
 
 	func();
 	func();
 
-	func.flush();
+	const flushResult = func.flush();
 
+	assert.equals(flushResult, 1);
 	assert.equals(count, 1);
 
 	setTimeout(() => {

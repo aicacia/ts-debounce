@@ -3,7 +3,7 @@ import type { PromisifyFn } from "./types";
 // biome-ignore lint/suspicious/noExplicitAny: allow any function
 export type ThrottleFn<F extends (...args: any) => any> = PromisifyFn<F> & {
 	cancel(): void;
-	flush(): void;
+	flush(): ReturnType<F> | undefined;
 };
 
 // biome-ignore lint/suspicious/noExplicitAny: allow any function
@@ -13,7 +13,7 @@ export function throttle<F extends (...args: any) => any>(
 ): ThrottleFn<F> {
 	let lastMS = 0;
 	let timeoutId: ReturnType<typeof setTimeout> | null = null;
-	let lastCall: (() => void) | null = null;
+	let lastCall: (() => ReturnType<F>) | null = null;
 	const resolvers: ((value: ReturnType<F>) => void)[] = [];
 	const rejectors: ((reason: unknown) => void)[] = [];
 
@@ -36,7 +36,7 @@ export function throttle<F extends (...args: any) => any>(
 
 	function flush() {
 		if (lastCall !== null) {
-			lastCall();
+			return lastCall();
 		}
 	}
 
@@ -76,6 +76,7 @@ export function throttle<F extends (...args: any) => any>(
 			} else {
 				resolve(result);
 			}
+			return result;
 		}
 
 		lastCall = call;
