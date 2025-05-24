@@ -1,6 +1,6 @@
 {
 	"name": "@aicacia/debounce",
-	"version": "0.1.24",
+	"version": "0.1.25",
 	"description": "debounce",
 	"repository": {
 		"type": "git",
@@ -25,7 +25,9 @@
 		"preCommit": "npm run format && npm run lint && npm run coverage",
 		"prepare": "husky"
 	},
-	"keywords": ["debounce"],
+	"keywords": [
+		"debounce"
+	],
 	"author": "Nathan Faucett",
 	"license": "(MIT OR Apache-2.0)",
 	"readmeFilename": "README.md",
@@ -55,8 +57,15 @@
 		"tslib": "2"
 	},
 	"nyc": {
-		"include": ["src"],
-		"exclude": ["src/**/*.test.*"],
-		"extension": [".ts", ".tsx"]
+		"include": [
+			"src"
+		],
+		"exclude": [
+			"src/**/*.test.*"
+		],
+		"extension": [
+			".ts",
+			".tsx"
+		]
 	}
 }
